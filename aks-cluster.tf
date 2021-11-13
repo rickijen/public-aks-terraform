@@ -1,4 +1,8 @@
-resource "random_string" "prefix" {}
+resource "random_string" "prefix" {
+  length  = 5
+  special = false
+  upper   = false
+}
 
 provider "azurerm" {
   features {}
