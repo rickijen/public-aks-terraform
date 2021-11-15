@@ -109,16 +109,18 @@ resource "azurerm_kubernetes_cluster" "default" {
     network_policy     = "azure"
   }
 
+/*
   service_principal {
     client_id     = var.appId
     client_secret = var.password
   }
+*/
 
-/*
   identity {
     type = SystemAssigned
   }
 
+/*
   # Kubernetes RBAC enabled with AKS-managed AAD integration
   role_based_access_control {
     enabled = true
