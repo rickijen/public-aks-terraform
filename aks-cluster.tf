@@ -65,7 +65,7 @@ resource "azurerm_log_analytics_solution" "default" {
 # AAD
 #####################################################################
 resource "azuread_group" "aks_administrators" {
-  name        = "${random_pet.prefix.id}-aks-admins"
+  display_name        = "${random_pet.prefix.id}-aks-admins"
   description = "Kubernetes administrators for the ${random_pet.prefix.id} cluster."
 }
 
