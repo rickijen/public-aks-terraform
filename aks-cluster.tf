@@ -4,6 +4,9 @@ provider "azurerm" {
   features {}
 }
 
+#####################################################################
+# Resource Group
+#####################################################################
 resource "azurerm_resource_group" "default" {
   name     = "${random_pet.prefix.id}-rg"
   location = "West US 2"
@@ -13,6 +16,9 @@ resource "azurerm_resource_group" "default" {
   }
 }
 
+#####################################################################
+# VNet and AKS Subnet
+#####################################################################
 resource "azurerm_virtual_network" "default" {
   name                = "${random_pet.prefix.id}-network"
   location            = azurerm_resource_group.default.location
@@ -31,6 +37,9 @@ resource "random_id" "log_analytics_workspace_name_suffix" {
     byte_length = 8
 }
 
+#####################################################################
+# Log Analytics workspace solution for AKS (Container Insights, etc.)
+#####################################################################
 resource "azurerm_log_analytics_workspace" "default" {
     # The WorkSpace name has to be unique across the whole of azure, not just the current subscription/tenant.
     name                = "${random_pet.prefix.id}-${random_id.log_analytics_workspace_name_suffix.dec}"
@@ -52,6 +61,19 @@ resource "azurerm_log_analytics_solution" "default" {
     }
 }
 
+#####################################################################
+# AAD
+#####################################################################
+/*
+resource "azuread_group" "aks_administrators" {
+  name        = "${random_pet.prefix.id}-administrators"
+  description = "Kubernetes administrators for the ${random_pet.prefix.id} cluster."
+}
+*/
+
+#####################################################################
+# Let's create the AKS Cluster
+#####################################################################
 resource "azurerm_kubernetes_cluster" "default" {
   name                = "${random_pet.prefix.id}-aks"
   location            = azurerm_resource_group.default.location
@@ -77,13 +99,8 @@ resource "azurerm_kubernetes_cluster" "default" {
     min_count           = 2
     max_count           = 4
 
-    # Required for advanced networking
+    # Required for advanced networking - CNI
     vnet_subnet_id = azurerm_subnet.default.id
-  }
-
-  service_principal {
-    client_id     = var.appId
-    client_secret = var.password
   }
 
   network_profile {
@@ -92,19 +109,37 @@ resource "azurerm_kubernetes_cluster" "default" {
     network_policy     = "azure"
   }
 
+  service_principal {
+    client_id     = var.appId
+    client_secret = var.password
+  }
+
+/*
+  identity {
+    type = SystemAssigned
+  }
+
+  # Kubernetes RBAC enabled with AKS-managed AAD integration
   role_based_access_control {
     enabled = true
+    azure_active_directory {
+      managed = true
+      admin_group_object_ids = [azuread_group.aks_administrators.object_id]
+    }
   }
-
-  azure_policy {
-    enabled = true
-  }
-
+*/
+  # Add On's
   addon_profile {
       oms_agent {
         enabled                    = true
         log_analytics_workspace_id = azurerm_log_analytics_workspace.default.id
       }
+      #azure_policy {
+      #  enabled = true
+      #}
+      #kube_dashboard {
+      #  enabled = true
+      #}
   }
 
   tags = {
