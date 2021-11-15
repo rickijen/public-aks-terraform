@@ -39,6 +39,8 @@ output "aks_managed_identity_object_id" {
     value = azurerm_kubernetes_cluster.default.identity.0.principal_id
 }
 
+/*
 output "aad_aks_admin_group_object_id" {
   value = azuread_group.aks_administrators.object_id
 }
+*/
