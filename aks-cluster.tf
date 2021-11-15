@@ -117,7 +117,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 */
 
   identity {
-    type = SystemAssigned
+    type = "SystemAssigned"
   }
 
 /*
