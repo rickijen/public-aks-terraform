@@ -14,14 +14,14 @@ resource "azurerm_resource_group" "default" {
 }
 
 resource "azurerm_virtual_network" "default" {
-  name                = "${random_pet.prefix}-network"
+  name                = "${random_pet.prefix.id}-network"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
   address_space       = ["10.2.0.0/16"]
 }
 
 resource "azurerm_subnet" "default" {
-  name                 = "${random_pet.prefix}-akssubnet"
+  name                 = "${random_pet.prefix.id}-akssubnet"
   virtual_network_name = azurerm_virtual_network.default.name
   resource_group_name  = azurerm_resource_group.default.name
   address_prefixes     = ["10.2.0.0/22"]
