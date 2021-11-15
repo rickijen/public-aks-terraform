@@ -96,6 +96,10 @@ resource "azurerm_kubernetes_cluster" "default" {
     enabled = true
   }
 
+  azure_policy {
+    enabled = true
+  }
+
   addon_profile {
       oms_agent {
         enabled                    = true
