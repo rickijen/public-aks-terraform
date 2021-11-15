@@ -64,12 +64,10 @@ resource "azurerm_log_analytics_solution" "default" {
 #####################################################################
 # AAD
 #####################################################################
-/*
 resource "azuread_group" "aks_administrators" {
-  name        = "${random_pet.prefix.id}-administrators"
+  name        = "${random_pet.prefix.id}-aks-admins"
   description = "Kubernetes administrators for the ${random_pet.prefix.id} cluster."
 }
-*/
 
 #####################################################################
 # Let's create the AKS Cluster
@@ -120,16 +118,17 @@ resource "azurerm_kubernetes_cluster" "default" {
     type = "SystemAssigned"
   }
 
-/*
+
   # Kubernetes RBAC enabled with AKS-managed AAD integration
   role_based_access_control {
     enabled = true
     azure_active_directory {
       managed = true
+      azure_rbac_enabled = true
       admin_group_object_ids = [azuread_group.aks_administrators.object_id]
     }
   }
-*/
+
   # Add On's
   addon_profile {
       oms_agent {
