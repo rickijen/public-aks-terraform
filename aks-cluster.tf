@@ -64,13 +64,14 @@ resource "azurerm_log_analytics_solution" "default" {
 #####################################################################
 # AAD
 #####################################################################
-/*
+
 resource "azuread_group" "aks_administrators" {
   display_name     = "${random_pet.prefix.id}-aks-admins"
-  security_enabled = true
+  mail_enabled     = false
+  security_enabled = false
+  mail_nickname    = "${random_pet.prefix.id}-aks-admins"
   description      = "Kubernetes administrators for the ${random_pet.prefix.id} cluster."
 }
-*/
 
 #####################################################################
 # Let's create the AKS Cluster
@@ -128,7 +129,8 @@ resource "azurerm_kubernetes_cluster" "default" {
     azure_active_directory {
       managed                = true
       azure_rbac_enabled     = true
-      admin_group_object_ids = [var.admin_group_obj_id]
+      #admin_group_object_ids = [var.admin_group_obj_id]
+      admin_group_object_ids = [azuread_group.aks_administrators.object_id]
     }
   }
 
