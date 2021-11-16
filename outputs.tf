@@ -45,6 +45,6 @@ output "aad_aks_admin_group_object_id" {
 }
 */
 
-output "azure_aks_policy_assignment_id" {
-    value = azurerm_policy_assignment.auditaks.id
+output "azure_aks_policy_rg_assignment_id" {
+    value = azurerm_resource_group_policy_assignment.auditaks.id
 }
