@@ -61,6 +61,9 @@ resource "azurerm_log_analytics_solution" "default" {
     }
 }
 
+#####################################################################
+# Azure Policy assignment
+#####################################################################
 resource "azurerm_resource_group_policy_assignment" "auditaks" {
     name                  = "audit-aks"
     resource_group_id     = azurerm_resource_group.default.id
