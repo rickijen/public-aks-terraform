@@ -20,3 +20,7 @@ variable log_analytics_workspace_sku {
 variable "ssh_public_key" {
   description = "ssh public key"
 }
+
+variable "azure_policy_k8s_initiative" {
+  description = "Kubernetes cluster pod security baseline standards for Linux-based workloads"
+}

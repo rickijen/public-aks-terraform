@@ -44,3 +44,7 @@ output "aad_aks_admin_group_object_id" {
   value = azuread_group.aks_administrators.object_id
 }
 */
+
+output "azure_aks_policy_assignment_id" {
+    value = azurerm_policy_assignment.auditaks.id
+}
