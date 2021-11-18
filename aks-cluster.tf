@@ -33,6 +33,13 @@ resource "azurerm_subnet" "default" {
   address_prefixes     = ["10.2.0.0/22"]
 }
 
+resource "azurerm_subnet" "appgw" {
+  name                 = "${random_pet.prefix.id}-agicsubnet"
+  virtual_network_name = azurerm_virtual_network.default.name
+  resource_group_name  = azurerm_resource_group.default.name
+  address_prefixes     = ["10.2.4.0/24"]
+}
+
 resource "random_id" "log_analytics_workspace_name_suffix" {
     byte_length = 8
 }
@@ -153,7 +160,8 @@ resource "azurerm_kubernetes_cluster" "default" {
 
       # Greenfield AGIC - this will create a new App Gateway in MC_ resource group
       ingress_application_gateway {
-        enabled = true
+        enabled   = true
+        subnet_id = azurerm_subnet.appgw.id
       }
 
       #kube_dashboard {
