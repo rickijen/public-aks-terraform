@@ -109,14 +109,14 @@ resource "azurerm_kubernetes_cluster" "default" {
 
   default_node_pool {
     name                = "default"
-    node_count          = 2
+    node_count          = 3
     vm_size             = "Standard_D2_v2"
     os_disk_size_gb     = 30
     #type                = "VirtualMachineScaleSets"
     availability_zones  = ["1", "2"]
     enable_auto_scaling = true
     min_count           = 2
-    max_count           = 4
+    max_count           = 6
 
     # Required for advanced networking - CNI
     vnet_subnet_id = azurerm_subnet.default.id
