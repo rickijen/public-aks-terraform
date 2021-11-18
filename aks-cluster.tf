@@ -121,7 +121,7 @@ resource "azurerm_kubernetes_cluster" "default" {
     network_policy     = "azure"
   }
 
-/*
+/* Legacy, use managed identity instead.
   service_principal {
     client_id     = var.appId
     client_secret = var.password
@@ -131,7 +131,6 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
-
 
   # Kubernetes RBAC enabled with AKS-managed AAD integration
   role_based_access_control {
@@ -151,6 +150,12 @@ resource "azurerm_kubernetes_cluster" "default" {
         log_analytics_workspace_id = azurerm_log_analytics_workspace.default.id
       }
       azure_policy { enabled = true }
+
+      # Greenfield AGIC - this will create a new App Gateway in MC_ resource group
+      ingress_application_gateway {
+        enabled = true
+      }
+
       #kube_dashboard {
       #  enabled = true
       #}
