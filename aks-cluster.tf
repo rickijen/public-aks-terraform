@@ -188,7 +188,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   kubernetes_version= "1.21.2"
 
   # Set auto-upgrade channel: patch, stable, rapid, none(Default)
-  automatic_channel_upgrade = "none"
+  automatic_channel_upgrade = "stable"
 
   # Planned Maintenance window
   /*
