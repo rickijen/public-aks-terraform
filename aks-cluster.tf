@@ -78,7 +78,7 @@ resource "azurerm_resource_group_policy_assignment" "auditaks" {
 }
 
 #####################################################################
-# AAD
+# Create AAD security group for aks admins, append IDs to k8s RBAC
 #####################################################################
 /*
 resource "azuread_group" "aks_administrators" {
@@ -107,6 +107,8 @@ resource "azurerm_kubernetes_cluster" "default" {
       }
   }
 
+  # Default node pool
+  # Create resource "azurerm_kubernetes_cluster_node_pool" for additional nodepools
   default_node_pool {
     name                = "default"
     node_count          = 3
@@ -126,7 +128,7 @@ resource "azurerm_kubernetes_cluster" "default" {
     }
 
     # This needs to be the same as the k8s verion of control plane.
-    # Also, if orchestrator_version is missing, only the control plane k8s will be upgraded, not the nodepool
+    # If orchestrator_version is missing, only the control plane k8s will be upgraded, not the nodepools
     orchestrator_version = "1.21.2"
   }
 
@@ -154,6 +156,7 @@ resource "azurerm_kubernetes_cluster" "default" {
       managed                = true
       azure_rbac_enabled     = true
       admin_group_object_ids = [var.admin_group_obj_id]
+      # append comma separated group obj IDs
       #admin_group_object_ids = [azuread_group.aks_administrators.object_id]
     }
   }
@@ -181,6 +184,25 @@ resource "azurerm_kubernetes_cluster" "default" {
     environment = "Demo"
   }
 
-  # Test the upgrade
+  # Upgrade the control plane only, specify orchestrator_version for the default nodepool
   kubernetes_version= "1.21.2"
+
+  # Set auto-upgrade channel: patch, stable, rapid, node-image, none(Default)
+  automatic_channel_upgrade = "node-image"
+
+  # Planned Maintenance window
+  maintenance_window {
+    allowed {
+      day = "Saturday"
+      hours = 21-23
+    }
+    allowed {
+      day = "Sunday"
+      hours = 21-23
+    }
+    not_allowed {
+      start = "2022-05-26T03:00:00Z"
+      end = "2022-05-30T12:00:00Z"
+    }
+  }
 }
