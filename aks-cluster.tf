@@ -99,22 +99,6 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "${random_pet.prefix.id}-k8s"
 
-  # Planned Maintenance window
-  maintenance_window {
-    allowed {
-      day = "Saturday"
-      hours = 21-23
-    }
-    allowed {
-      day = "Sunday"
-      hours = 21-23
-    }
-    not_allowed {
-      start = "2022-05-26T03:00:00Z"
-      end = "2022-05-30T12:00:00Z"
-    }
-  }
-
   linux_profile {
       admin_username = "azureuser"
 
@@ -205,4 +189,22 @@ resource "azurerm_kubernetes_cluster" "default" {
 
   # Set auto-upgrade channel: patch, stable, rapid, node-image, none(Default)
   automatic_channel_upgrade = "node-image"
+
+  # Planned Maintenance window
+  /*
+  maintenance_window {
+    allowed {
+      day = "Saturday"
+      hours = 21-23
+    }
+    allowed {
+      day = "Sunday"
+      hours = 21-23
+    }
+    not_allowed {
+      start = "2022-05-26T03:00:00Z"
+      end = "2022-05-30T12:00:00Z"
+    }
+  }
+  */
 }
