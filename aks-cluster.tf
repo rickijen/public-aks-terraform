@@ -110,7 +110,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   # Default node pool (aka, the System nodepool required by AKS)
   # Use resource "azurerm_kubernetes_cluster_node_pool" to managed nodepools
   default_node_pool {
-    name                = "System"
+    name                = "system" #[a-z0-9]
     node_count          = 3
     vm_size             = "Standard_D3_v2"
     os_disk_size_gb     = 30
