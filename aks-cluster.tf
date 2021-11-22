@@ -124,6 +124,10 @@ resource "azurerm_kubernetes_cluster" "default" {
     upgrade_settings {
       max_surge = "30%"
     }
+
+    # This needs to be the same as the k8s verion of control plane.
+    # Also, if orchestrator_version is missing, only the control plane k8s will be upgraded, not the nodepool
+    orchestrator_version = "1.21.2"
   }
 
   network_profile {
