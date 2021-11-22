@@ -120,6 +120,10 @@ resource "azurerm_kubernetes_cluster" "default" {
 
     # Required for advanced networking - CNI
     vnet_subnet_id = azurerm_subnet.default.id
+    # Upgrade settings
+    upgrade_settings {
+      max_surge = "30%"
+    }
   }
 
   network_profile {
@@ -172,4 +176,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   tags = {
     environment = "Demo"
   }
+
+  # Test the upgrade
+  kubernetes_version= "1.21.2"
 }
