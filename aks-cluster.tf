@@ -187,8 +187,8 @@ resource "azurerm_kubernetes_cluster" "default" {
   # Upgrade the control plane only, specify orchestrator_version for the default nodepool
   kubernetes_version= "1.21.2"
 
-  # Set auto-upgrade channel: patch, stable, rapid, node-image, none(Default)
-  automatic_channel_upgrade = "node-image"
+  # Set auto-upgrade channel: patch, stable, rapid, none(Default)
+  automatic_channel_upgrade = "none"
 
   # Planned Maintenance window
   /*
