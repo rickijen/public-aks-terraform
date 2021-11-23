@@ -24,3 +24,7 @@ variable "ssh_public_key" {
 variable "azure_policy_k8s_initiative" {
   description = "Kubernetes cluster pod security baseline standards for Linux-based workloads"
 }
+
+variable "windowspassword" {
+  description = "Windows admin password"
+}

@@ -107,11 +107,32 @@ resource "azurerm_kubernetes_cluster" "default" {
       }
   }
 
+  windows_profile {
+    admin_username = "azureuser"
+    admin_password = var.windowspassword
+  }
+
+  # Planned Maintenance window
+  maintenance_window {
+    allowed {
+      day = "Saturday"
+      hours = 21-23
+    }
+    allowed {
+      day = "Sunday"
+      hours = 21-23
+    }
+    not_allowed {
+      start = "2022-05-26T03:00:00Z"
+      end = "2022-05-30T12:00:00Z"
+    }
+  }
+
   # Default node pool (aka, the minimum 1 System nodepool required by AKS)
   # CoreDNS and metrics-server will be scheduled to run on default node pool
   # Use resource "azurerm_kubernetes_cluster_node_pool" to managed nodepools
   default_node_pool {
-    name                = "system" #[a-z0-9]
+    name                = "syspool" #[a-z0-9]
     node_count          = 3
     vm_size             = "Standard_D2_v2"
     os_disk_size_gb     = 30
@@ -194,29 +215,11 @@ resource "azurerm_kubernetes_cluster" "default" {
 
   # Set auto-upgrade channel: patch, stable, rapid, none(Default)
   automatic_channel_upgrade = "stable"
-
-  # Planned Maintenance window
-  /*
-  maintenance_window {
-    allowed {
-      day = "Saturday"
-      hours = 21-23
-    }
-    allowed {
-      day = "Sunday"
-      hours = 21-23
-    }
-    not_allowed {
-      start = "2022-05-26T03:00:00Z"
-      end = "2022-05-30T12:00:00Z"
-    }
-  }
-  */
 }
 
 # User mode node pool - Linux
 resource "azurerm_kubernetes_cluster_node_pool" "usrpl1" {
-  name                  = "usrpl1"
+  name                  = "upool1"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
   vm_size               = "Standard_DS2_v2"
   node_count            = 3
@@ -237,7 +240,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl1" {
 
 # User mode node pool - Windows
 resource "azurerm_kubernetes_cluster_node_pool" "usrpl2" {
-  name                  = "usrpl2"
+  name                  = "upool2"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
   vm_size               = "Standard_DS2_v2"
   node_count            = 3
