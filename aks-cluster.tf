@@ -239,6 +239,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl1" {
   }
 }
 
+/*
 # User mode node pool - Windows
 resource "azurerm_kubernetes_cluster_node_pool" "usrpl2" {
   name                  = "upool2"
@@ -260,3 +261,4 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl2" {
     Environment = "Production"
   }
 }
+*/
