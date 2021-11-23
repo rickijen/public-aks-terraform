@@ -107,14 +107,15 @@ resource "azurerm_kubernetes_cluster" "default" {
       }
   }
 
-  # Default node pool (aka, the System nodepool required by AKS)
+  # Default node pool (aka, the minimum 1 System nodepool required by AKS)
+  # CoreDNS and metrics-server will be scheduled to run on default node pool
   # Use resource "azurerm_kubernetes_cluster_node_pool" to managed nodepools
   default_node_pool {
-    name                = "system" #[a-z0-9]
+    name                = "systempool" #[a-z0-9]
     node_count          = 3
-    vm_size             = "Standard_D3_v2"
+    vm_size             = "Standard_D2_v2"
     os_disk_size_gb     = 30
-    #type                = "VirtualMachineScaleSets"
+    type                = "VirtualMachineScaleSets"
     availability_zones  = ["1", "2"]
     enable_auto_scaling = true
     min_count           = 2
@@ -122,6 +123,10 @@ resource "azurerm_kubernetes_cluster" "default" {
 
     # Required for advanced networking - CNI
     vnet_subnet_id = azurerm_subnet.default.id
+
+    # node taints: prevent application pods from being scheduled on system node pool
+    only_critical_addons_enabled = true
+
     # Upgrade settings
     upgrade_settings {
       max_surge = "30%"
@@ -131,6 +136,27 @@ resource "azurerm_kubernetes_cluster" "default" {
     # If orchestrator_version is missing, only the control plane k8s will be upgraded, not the nodepools
     orchestrator_version = "1.21.2"
   }
+
+  # User mode node pool
+  resource "azurerm_kubernetes_cluster_node_pool" "default" {
+  name                  = "userpool"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
+  vm_size               = "Standard_DS2_v2"
+  node_count            = 3
+  availability_zones    = ["1", "2"]
+  enable_auto_scaling   = true  
+  min_count             = 2
+  max_count             = 6
+
+  # Upgrade settings
+  upgrade_settings {
+    max_surge = "30%"
+  }
+
+  tags = {
+    Environment = "Production"
+  }
+}
 
   network_profile {
     network_plugin     = "azure"
@@ -181,7 +207,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   tags = {
-    environment = "Demo"
+    environment = "Production"
   }
 
   # Upgrade the control plane only, specify orchestrator_version for the default nodepool
