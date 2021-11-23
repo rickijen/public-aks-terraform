@@ -116,11 +116,11 @@ resource "azurerm_kubernetes_cluster" "default" {
   maintenance_window {
     allowed {
       day = "Saturday"
-      hours = ["21-23"]
+      hours = [21, 23]
     }
     allowed {
       day = "Sunday"
-      hours = ["5-6", "21-23"]
+      hours = [5, 6]
     }
     not_allowed {
       start = "2022-05-26T03:00:00Z"
