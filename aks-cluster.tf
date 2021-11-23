@@ -112,6 +112,7 @@ resource "azurerm_kubernetes_cluster" "default" {
     admin_password = var.windowspassword
   }
 
+/*
   # Planned Maintenance window
   maintenance_window {
     allowed {
@@ -127,7 +128,7 @@ resource "azurerm_kubernetes_cluster" "default" {
       end = "2022-05-30T12:00:00Z"
     }
   }
-
+*/
   # Default node pool (aka, the minimum 1 System nodepool required by AKS)
   # CoreDNS and metrics-server will be scheduled to run on default node pool
   # Use resource "azurerm_kubernetes_cluster_node_pool" to managed nodepools
