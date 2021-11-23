@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "default" {
   location = "West US 2"
 
   tags = {
-    environment = "Production"
+    environment = "Premera"
   }
 }
 
@@ -207,7 +207,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   tags = {
-    environment = "Production"
+    environment = "Premera"
   }
 
   # Upgrade the control plane only, specify orchestrator_version for the default nodepool
@@ -234,7 +234,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl1" {
   }
 
   tags = {
-    environment = "Production"
+    environment = "Premera"
   }
 }
 
@@ -256,6 +256,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl2" {
   }
 
   tags = {
-    environment = "Production"
+    environment = "Premera"
   }
 }
