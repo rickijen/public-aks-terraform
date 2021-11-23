@@ -134,7 +134,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   # Use resource "azurerm_kubernetes_cluster_node_pool" to managed nodepools
   default_node_pool {
     name                = "syspool" #[a-z0-9]
-    node_count          = 3
+    # node_count          = 3
     vm_size             = "Standard_D2_v2"
     os_disk_size_gb     = 30
     type                = "VirtualMachineScaleSets"
@@ -223,7 +223,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl1" {
   name                  = "upool1"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
   vm_size               = "Standard_DS2_v2"
-  node_count            = 3
+  # node_count            = 3
   availability_zones    = ["1", "2"]
   enable_auto_scaling   = true  
   min_count             = 2
@@ -245,7 +245,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "usrpl2" {
   name                  = "upool2"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
   vm_size               = "Standard_DS2_v2"
-  node_count            = 3
+  # node_count            = 3
   availability_zones    = ["1", "2"]
   enable_auto_scaling   = true  
   min_count             = 2
