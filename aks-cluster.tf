@@ -111,7 +111,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   # CoreDNS and metrics-server will be scheduled to run on default node pool
   # Use resource "azurerm_kubernetes_cluster_node_pool" to managed nodepools
   default_node_pool {
-    name                = "systempool" #[a-z0-9]
+    name                = "system" #[a-z0-9]
     node_count          = 3
     vm_size             = "Standard_D2_v2"
     os_disk_size_gb     = 30
@@ -214,9 +214,9 @@ resource "azurerm_kubernetes_cluster" "default" {
   */
 }
 
-# User mode node pool
-resource "azurerm_kubernetes_cluster_node_pool" "default" {
-  name                  = "userpool"
+# User mode node pool - Linux
+resource "azurerm_kubernetes_cluster_node_pool" "usrpl1" {
+  name                  = "usrpl1"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
   vm_size               = "Standard_DS2_v2"
   node_count            = 3
@@ -224,6 +224,28 @@ resource "azurerm_kubernetes_cluster_node_pool" "default" {
   enable_auto_scaling   = true  
   min_count             = 2
   max_count             = 6
+
+  # Upgrade settings
+  upgrade_settings {
+    max_surge = "30%"
+  }
+
+  tags = {
+    Environment = "Production"
+  }
+}
+
+# User mode node pool - Windows
+resource "azurerm_kubernetes_cluster_node_pool" "usrpl2" {
+  name                  = "usrpl2"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
+  vm_size               = "Standard_DS2_v2"
+  node_count            = 3
+  availability_zones    = ["1", "2"]
+  enable_auto_scaling   = true  
+  min_count             = 2
+  max_count             = 6
+  os_type               = "Windows"
 
   # Upgrade settings
   upgrade_settings {
