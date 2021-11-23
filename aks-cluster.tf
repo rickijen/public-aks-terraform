@@ -137,27 +137,6 @@ resource "azurerm_kubernetes_cluster" "default" {
     orchestrator_version = "1.21.2"
   }
 
-  # User mode node pool
-  resource "azurerm_kubernetes_cluster_node_pool" "default" {
-  name                  = "userpool"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
-  vm_size               = "Standard_DS2_v2"
-  node_count            = 3
-  availability_zones    = ["1", "2"]
-  enable_auto_scaling   = true  
-  min_count             = 2
-  max_count             = 6
-
-  # Upgrade settings
-  upgrade_settings {
-    max_surge = "30%"
-  }
-
-  tags = {
-    Environment = "Production"
-  }
-}
-
   network_profile {
     network_plugin     = "azure"
     load_balancer_sku  = "standard"
@@ -233,4 +212,25 @@ resource "azurerm_kubernetes_cluster" "default" {
     }
   }
   */
+}
+
+# User mode node pool
+resource "azurerm_kubernetes_cluster_node_pool" "default" {
+  name                  = "userpool"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
+  vm_size               = "Standard_DS2_v2"
+  node_count            = 3
+  availability_zones    = ["1", "2"]
+  enable_auto_scaling   = true  
+  min_count             = 2
+  max_count             = 6
+
+  # Upgrade settings
+  upgrade_settings {
+    max_surge = "30%"
+  }
+
+  tags = {
+    Environment = "Production"
+  }
 }
