@@ -156,7 +156,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 
     # This needs to be the same as the k8s verion of control plane.
     # If orchestrator_version is missing, only the control plane k8s will be upgraded, not the nodepools
-    orchestrator_version = "1.21.2"
+    # orchestrator_version = "1.21.2"
   }
 
   network_profile {
@@ -212,7 +212,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   # Upgrade the control plane only, specify orchestrator_version for the default nodepool
-  kubernetes_version= "1.21.2"
+  # kubernetes_version= "1.21.2"
 
   # Set auto-upgrade channel: patch, stable, rapid, none(Default)
   automatic_channel_upgrade = "stable"
