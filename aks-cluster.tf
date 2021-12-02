@@ -72,7 +72,7 @@ resource "azurerm_log_analytics_solution" "default" {
 # Azure Policy assignment
 #####################################################################
 resource "azurerm_resource_group_policy_assignment" "auditaks" {
-    name                  = "audit-aks"
+    name                  = "audit-${random_pet.prefix.id}-aks"
     resource_group_id     = azurerm_resource_group.default.id
     policy_definition_id  = var.azure_policy_k8s_initiative
 }
