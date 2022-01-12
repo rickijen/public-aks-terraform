@@ -99,7 +99,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "${random_pet.prefix.id}-k8s"
   # az aks get-credentials --admin will fail. Non-audible backdoor is closed
-  local_account_disabled  = true
+  local_account_disabled  = false
 
   linux_profile {
       admin_username = "azureuser"
