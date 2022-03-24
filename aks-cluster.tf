@@ -9,9 +9,9 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  features {}
-}
+#provider "azurerm" {
+#  features {}
+#}
 
 #####################################################################
 # Resource Group
